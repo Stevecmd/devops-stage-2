@@ -1,6 +1,6 @@
 services:
   postgresdb:
-    image: postgres:alpine
+    image: postgres:stevecmd/devops-stage-2-postgresdb:latest
     environment:
       POSTGRES_DB: app
       POSTGRES_USER: app
@@ -11,22 +11,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - internal-network
-    # healthcheck:
-    #   test: ["CMD-SHELL", "pg_isready -U app"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
 
   backend:
-    # build: ./backend
-    # env_file:
-    #   - ./backend/.env
+    image: stevecmd/devops-stage-2-backend:latest
     environment:
       POSTGRES_SERVER: postgresdb
       POSTGRES_PASSWORD: humanslovedbs
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     expose:
@@ -37,9 +27,7 @@ services:
       - internal-network
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: stevecmd/devops-stage-2-frontend:latest
     expose:
       - 5173
     ports:
@@ -48,14 +36,14 @@ services:
       - internal-network
 
   adminer:
-    image: adminer
+    image: stevecmd/devops-stage-2-adminer:latest
     ports:
       - "8080:8080"
     networks:
       - internal-network
 
   nginx:
-    image: nginx:alpine
+    image: stevecmd/devops-stage-2-nginx:latest
     ports:
       - "80:80"
     volumes:
@@ -64,6 +52,25 @@ services:
       - backend
       - frontend
       - adminer
+    networks:
+      - internal-network
+
+  proxy-manager:
+    image: stevecmd/devops-stage-2-proxy-manager:latest
+    ports:
+      - "8090:8080"
+      - "81:81"   # HTTP Port for Let's Encrypt Challenge
+      - "444:444" # HTTPS Port for Let's Encrypt Challenge
+    environment:
+      DB_MYSQL_HOST: db
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: pmuser
+      DB_MYSQL_PASSWORD: password
+      DB_MYSQL_NAME: nginx_proxy_manager
+    volumes:
+      - ./proxy-manager/data:/data
+      - ./proxy-manager/letsencrypt:/etc/letsencrypt
+      - ./proxy-manager/var/log:/var/log
     networks:
       - internal-network
 
