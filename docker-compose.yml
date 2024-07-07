@@ -9,8 +9,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    # networks:
-    #   - internal-network
+    networks:
+      - internal-network
     # healthcheck:
     #   test: ["CMD-SHELL", "pg_isready -U app"]
     #   interval: 10s
@@ -33,6 +33,8 @@ services:
       - 8000
     depends_on:
       - postgresdb
+    networks:
+      - internal-network
 
   frontend:
     build:
@@ -42,6 +44,15 @@ services:
       - 5173
     ports:
       - "5173:5173"
+    networks:
+      - internal-network
+
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - internal-network
 
   nginx:
     image: nginx:alpine
@@ -52,6 +63,13 @@ services:
     depends_on:
       - backend
       - frontend
+      - adminer
+    networks:
+      - internal-network
+
+networks:
+  internal-network:
+    driver: bridge
 
 volumes:
   postgres_data:
