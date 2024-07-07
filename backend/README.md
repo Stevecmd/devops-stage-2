@@ -42,3 +42,22 @@ Add Poetry to your PATH (if not automatically added):
 
 5. **Update configuration**:
    Ensure you update the necessary configurations in the `.env` file, particularly the database configuration.
+
+## Extra
+
+6. **Convert Bash files to CRLF to fix line endings**:
+```sh
+dos2unix *.sh
+```
+
+7. Reduce use of resources
+Once Docker has been setup, you might use `docker-compose build --no-cache` followed by `docker-compose up` when you've made <br />
+significant changes to your Docker images or configurations and want to ensure that you're starting <br />
+fresh without any cached layers affecting the build process. <br />
+`--no-cache:` - This flag tells Docker Compose to build the images without using any cached layers.
+```sh
+
+docker-compose build --no-cache
+docker-compose up
+
+```
