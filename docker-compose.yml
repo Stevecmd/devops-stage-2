@@ -2,6 +2,8 @@ version: '3.8'
 services:
   postgresdb:
     image: stevecmd/devops-stage-2-postgresdb:latest
+    env_file:
+      - ./backend/.env
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -19,6 +21,8 @@ services:
       - ./backend/.env
     environment:
       POSTGRES_SERVER: postgresdb
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "8000:8000"
@@ -70,6 +74,8 @@ services:
       - "8090:8080"
       - "81:81"   # HTTP Port for Let's Encrypt Challenge
       - "444:444" # HTTPS Port for Let's Encrypt Challenge
+    env_file:
+      - ./backend/.env
     environment:
       DB_HOST: postgresdb
       DB_PORT: 5432
