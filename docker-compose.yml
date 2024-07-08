@@ -62,7 +62,7 @@ services:
       - "81:81"   # HTTP Port for Let's Encrypt Challenge
       - "444:444" # HTTPS Port for Let's Encrypt Challenge
     environment:
-      DB_MYSQL_HOST: db
+      DB_MYSQL_HOST: postgresdb
       DB_MYSQL_PORT: 3306
       DB_MYSQL_USER: pmuser
       DB_MYSQL_PASSWORD: password
