@@ -1,10 +1,11 @@
+version: '3.8'
 services:
   postgresdb:
     image: stevecmd/devops-stage-2-postgresdb:latest
     environment:
-      POSTGRES_DB: app
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: humanslovedbs
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -14,9 +15,11 @@ services:
 
   backend:
     image: stevecmd/devops-stage-2-backend:latest
+    env_file:
+      - ./backend/.env
     environment:
       POSTGRES_SERVER: postgresdb
-      POSTGRES_PASSWORD: humanslovedbs
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "8000:8000"
     expose:
@@ -66,9 +69,9 @@ services:
     environment:
       DB_HOST: postgresdb
       DB_PORT: 5432
-      DB_USER: app
-      DB_PASSWORD: humanslovedbs
-      DB_NAME: app
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
     volumes:
       - ./proxy-manager/data:/data
       - ./proxy-manager/letsencrypt:/etc/letsencrypt
