@@ -56,7 +56,6 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - /etc/ssl/certs/nginx-selfsigned.crt:/etc/ssl/certs/nginx-selfsigned.crt
       - /etc/ssl/private/nginx-selfsigned.key:/etc/ssl/private/nginx-selfsigned.key
-      - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
       - backend
       - frontend
