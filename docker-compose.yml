@@ -1,6 +1,6 @@
 services:
   postgresdb:
-    image: postgres:stevecmd/devops-stage-2-postgresdb:latest
+    image: stevecmd/devops-stage-2-postgresdb:latest
     environment:
       POSTGRES_DB: app
       POSTGRES_USER: app
