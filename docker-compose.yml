@@ -73,7 +73,7 @@ services:
       DB_NAME: ${POSTGRES_DB}
     ports:
       - "8090:8080"
-      - "444:444" # HTTPS Port for Let's Encrypt Challenge
+      - "443:443" # HTTPS Port for Let's Encrypt Challenge
     volumes:
       - ./proxy-manager/data:/data
       - ./proxy-manager/letsencrypt:/etc/letsencrypt
