@@ -20,3 +20,9 @@ To get started with this template, please follow the instructions in the respect
 
 docker-compose up --build
 docker-compose down --remove-orphans
+
+Links:
+http://localhost:8080/adminer
+http://localhost:8000/redoc
+http://localhost:8000/docs
+http://localhost:5173/login
