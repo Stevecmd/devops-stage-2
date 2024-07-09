@@ -18,6 +18,9 @@ from app.utils import (
     verify_password_reset_token,
 )
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 router = APIRouter()
 
 
@@ -28,20 +31,29 @@ def login_access_token(
     """
     OAuth2 compatible token login, get an access token for future requests
     """
+    logging.debug(f"Attempting login for user: {form_data.username}")
+
+    # Verify the password hash
     user = crud.authenticate(
         session=session, email=form_data.username, password=form_data.password
     )
-    if not user:
+    
+    if user:
+        logging.info(f"User authenticated successfully: {form_data.username}")
+    else:
+        logging.warning(f"User login failed for: {form_data.username}")
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    elif not user.is_active:
+
+    if not user.is_active:
+        logging.warning(f"Inactive user attempted login: {form_data.username}")
         raise HTTPException(status_code=400, detail="Inactive user")
+
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return Token(
         access_token=security.create_access_token(
             user.id, expires_delta=access_token_expires
         )
     )
-
 
 @router.post("/login/test-token", response_model=UserPublic)
 def test_token(current_user: CurrentUser) -> Any:
@@ -112,7 +124,7 @@ def recover_password_html_content(email: str, session: SessionDep) -> Any:
     if not user:
         raise HTTPException(
             status_code=404,
-            detail="The user with this username does not exist in the system.",
+            detail="The user with this email does not exist in the system.",
         )
     password_reset_token = generate_password_reset_token(email=email)
     email_data = generate_reset_password_email(
@@ -120,5 +132,5 @@ def recover_password_html_content(email: str, session: SessionDep) -> Any:
     )
 
     return HTMLResponse(
-        content=email_data.html_content, headers={"subject:": email_data.subject}
+        content=email_data.html_content, headers={"subject": email_data.subject}
     )

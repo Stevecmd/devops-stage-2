@@ -18,3 +18,5 @@ To get started with this template, please follow the instructions in the respect
 - [Frontend README](./frontend/README.md)
 - [Backend README](./backend/README.md)
 
+docker-compose up --build
+docker-compose down --remove-orphans
