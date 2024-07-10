@@ -4,12 +4,12 @@ services:
   postgresdb:
     container_name: POSTGRES_DB
     image: stevecmd/devops-stage-2-postgresdb:latest
-    environment:
-      POSTGRES_DB: app
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: humanslovedbs
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -31,9 +31,9 @@ services:
     image: stevecmd/devops-stage-2-backend:latest
     environment:
       POSTGRES_SERVER: postgresdb
-      POSTGRES_DB: app
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: humanslovedbs
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "8000:8000"
     expose:
