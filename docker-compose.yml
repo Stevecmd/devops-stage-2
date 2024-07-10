@@ -12,7 +12,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - internal-network
-    restart: always
+    # restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U app"]
       interval: 10s
@@ -70,7 +70,7 @@ services:
   nginx-proxy-manager:
     container_name: NGINX_PROXY_MANAGER
     image: jc21/nginx-proxy-manager:latest
-    restart: unless-stopped
+    # restart: unless-stopped
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
