@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgresdb:
     container_name: POSTGRES_DB
@@ -69,33 +67,20 @@ services:
     networks:
       - internal-network
 
-  nginx:
-    container_name: NGINX
-    image: stevecmd/devops-stage-2-nginx:latest
-    restart: always
-    ports:
-      - "8080:80" # HTTP
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - frontend
-      - backend
-    networks:
-      - internal-network
-
   nginx-proxy-manager:
     container_name: NGINX_PROXY_MANAGER
     image: jc21/nginx-proxy-manager:latest
     restart: unless-stopped
-    # environment:
-    #   DB_SQLITE_FILE: "/data/database.sqlite"
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
     ports:
-      - "8090:82" # Proxy Management UI
-      - "8083:8080"   # HTTP
+      - "8090:81" # Proxy Management UI
+      - "8080:80" # HTTP
       - "443:443" # HTTPS
+    depends_on:
+      - frontend
+      - backend
     networks:
       - internal-network
 

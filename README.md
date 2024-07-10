@@ -26,3 +26,5 @@ http://localhost:8080/adminer
 http://localhost:8000/redoc
 http://localhost:8000/docs
 http://localhost:5173/login
+
+admin@example.com
