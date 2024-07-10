@@ -36,9 +36,9 @@ services:
       - "8000:8000"
     expose:
       - 8000
-    depends_on:
-      postgresdb:
-        condition: service_healthy
+    # depends_on:
+    #   postgresdb:
+    #     condition: service_healthy
     networks:
       - internal-network
     command: >
@@ -56,8 +56,8 @@ services:
       - "5173:5173"
     networks:
       - internal-network
-    depends_on:
-      - backend
+    # depends_on:
+    #   - backend
 
   adminer:
     container_name: ADMINER
@@ -78,9 +78,9 @@ services:
       - "8090:81" # Proxy Management UI
       - "8080:80" # HTTP
       - "8443:443" # HTTPS
-    depends_on:
-      - frontend
-      - backend
+    # depends_on:
+    #   - frontend
+    #   - backend
     networks:
       - internal-network
 
